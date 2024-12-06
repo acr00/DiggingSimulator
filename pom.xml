@@ -27,6 +27,13 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Dependencia de JPA para Jakarta (Spring Boot 3.x) -->
+    <dependency>
+        <groupId>jakarta.persistence</groupId>
+        <artifactId>jakarta.persistence-api</artifactId>
+        <version>3.1.0</version> <!-- Asegúrate de usar una versión compatible -->
+    </dependency>
+
         <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
