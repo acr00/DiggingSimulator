@@ -11,10 +11,10 @@ public class UserTest {
         String email = "testUser@gmail.com";
         String password = "testPassword";
         String rol = "admin";
-        User user = new User(id, username, email, password, rol);
+        User user = new User(id, email, username, password, rol);
         assertEquals(id, user.getId());
-        assertEquals(username, user.getUsername());
         assertEquals(email, user.getEmail());
+        assertEquals(username, user.getUsername());
         assertEquals(password, user.getPassword());
         assertEquals(rol, user.getRol());
     }
