@@ -1,35 +1,55 @@
 package dev.acr.diggingsimulator.Users;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
 
-public class UserTest {
-    @Test
-    void testConstructorUser() {
-        Long id = 1L;
-        String username = "testUser";
-        String email = "testUser@gmail.com";
-        String password = "testPassword";
-        String rol = "admin";
-        User user = new User(id, email, username, password, rol);
-        assertEquals(id, user.getId());
-        assertEquals(email, user.getEmail());
-        assertEquals(username, user.getUsername());
-        assertEquals(password, user.getPassword());
-        assertEquals(rol, user.getRol());
+class UserTest {
+
+    private User user;
+
+    @BeforeEach
+    void setUp() {
+        user = new User(
+            "player@example.com", 
+            "gamePlayer", 
+            "securePassword123", 
+            UserRole.PLAYER
+        );
     }
+
     @Test
-    void testGettersSetters(){
-        User user = new User();
-        user.setId(1L);
-        user.setEmail("testUser@gmail.com");
-        user.setUsername("testUser");
-        user.setPassword("testPassword");
-        user.setRol("admin");
-        assertEquals(1L, user.getId());
-        assertEquals("testUser@gmail.com", user.getEmail());
-        assertEquals("testUser", user.getUsername());
-        assertEquals("testPassword", user.getPassword());
-        assertEquals("admin", user.getRol());
+    void testUserCreation() {
+        assertNotNull(user);
+        assertEquals("player@example.com", user.getEmail());
+        assertEquals("gamePlayer", user.getUsername());
+        assertEquals(UserRole.PLAYER, user.getRole());
+    }
+
+    @Test
+    void testSetterMethods() {
+        user.setEmail("newemail@example.com");
+        user.setUsername("newUsername");
+        user.setPassword("newPassword");
+        user.setRole(UserRole.ADMIN);
+
+        assertEquals("newemail@example.com", user.getEmail());
+        assertEquals("newUsername", user.getUsername());
+        assertEquals("newPassword", user.getPassword());
+        assertEquals(UserRole.ADMIN, user.getRole());
+    }
+
+    @Test
+    void testCreatedAtTimestamp() {
+        assertNotNull(user.getCreatedAt());
+        assertTrue(user.getCreatedAt().isBefore(LocalDateTime.now()));
+    }
+
+    @Test
+    void testLastLoginUpdate() {
+        LocalDateTime loginTime = LocalDateTime.now();
+        user.setLastLogin(loginTime);
+        assertEquals(loginTime, user.getLastLogin());
     }
 }
