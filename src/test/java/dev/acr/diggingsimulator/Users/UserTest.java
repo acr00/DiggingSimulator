@@ -15,7 +15,7 @@ class UserTest {
             "player@example.com", 
             "gamePlayer", 
             "securePassword123", 
-            UserRole.PLAYER
+            UserRole.USER
         );
     }
 
@@ -24,7 +24,7 @@ class UserTest {
         assertNotNull(user);
         assertEquals("player@example.com", user.getEmail());
         assertEquals("gamePlayer", user.getUsername());
-        assertEquals(UserRole.PLAYER, user.getRole());
+        assertEquals(UserRole.USER, user.getRole());
     }
 
     @Test
