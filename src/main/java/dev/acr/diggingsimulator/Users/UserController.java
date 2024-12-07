@@ -33,12 +33,12 @@ public class UserController {
             .map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
     }
     
-    // Clase interna para manejar la solicitud de login
+    
     public static class LoginRequest {
         private String username;
         private String password;
 
-        // Getters y setters
+        
         public String getUsername() { return username; }
         public void setUsername(String username) { this.username = username; }
         public String getPassword() { return password; }

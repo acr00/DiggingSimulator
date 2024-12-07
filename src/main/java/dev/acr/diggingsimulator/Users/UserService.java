@@ -17,19 +17,19 @@ public class UserService {
 
     public User registerUser(User user) {
         
-        // Verificar si el email o username ya existen
+        
         if (userRepository.findByEmail(user.getEmail()).isPresent() ||
             userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("Email o username ya registrado");
         }
 
-        // Codificar contraseña
+        
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         
-        // Establecer rol por defecto
+        
         user.setRole(UserRole.USER);
         
-        // Establecer fecha de creación
+       
         user.setCreatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
