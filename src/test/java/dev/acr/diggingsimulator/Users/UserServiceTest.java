@@ -31,47 +31,43 @@ class UserServiceTest {
     }
 
     @Test
-        void testRegisterUser_Success() {
-    
-    User user = new User();
-    user.setUsername("newUser");
-    user.setEmail("new@example.com");
-    user.setPassword("password123");
+    void testRegisterUser_Success() {
+        User user = new User();
+        user.setUsername("newUser");
+        user.setEmail("new@example.com");
+        user.setPassword("password123");
 
-    when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-    when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-    when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
-    when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
+        when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(user);
 
-    ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
 
-    User registeredUser = userService.registerUser(user);
+        User registeredUser = userService.registerUser(user);
 
-    assertNotNull(registeredUser);
-    assertEquals(UserRole.USER, registeredUser.getRole());
-    assertNotNull(registeredUser.getCreatedAt());
+        assertNotNull(registeredUser);
+        assertEquals(UserRole.USER, registeredUser.getRole());
+        assertNotNull(registeredUser.getCreatedAt());
 
-    verify(passwordEncoder).encode(passwordCaptor.capture());
-    assertEquals("password123", passwordCaptor.getValue());
+        verify(passwordEncoder).encode(passwordCaptor.capture());
+        assertEquals("password123", passwordCaptor.getValue());
 
-    verify(userRepository).save(user);
-}
+        verify(userRepository).save(user);
+    }
 
     @Test
     void testRegisterUser_DuplicateEmail() {
-        
         User user = new User();
         user.setEmail("existing@example.com");
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(new User()));
 
-        
-        assertThrows(RuntimeException.class, () -> userService.registerUser(user));
+        assertThrows(UserService.EmailAlreadyExistsException.class, () -> userService.registerUser(user));
     }
 
     @Test
     void testLogin_Success() {
-        
         User user = new User();
         user.setUsername("testUser");
         user.setPassword("encodedPassword");
@@ -79,10 +75,8 @@ class UserServiceTest {
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("rawPassword", user.getPassword())).thenReturn(true);
 
-        
         Optional<User> loggedUser = userService.login("testUser", "rawPassword");
 
-        
         assertTrue(loggedUser.isPresent());
         assertNotNull(user.getLastLogin());
         verify(userRepository).save(user);
@@ -90,19 +84,15 @@ class UserServiceTest {
 
     @Test
     void testLogin_Failure() {
-        
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());
 
-        
         Optional<User> loggedUser = userService.login("testUser", "password");
 
-        
         assertTrue(loggedUser.isEmpty());
     }
 
     @Test
     void testLogin_UpdatesLastLogin() {
-
         User user = new User();
         user.setUsername("testUser");
         user.setPassword("encodedPassword");
@@ -114,48 +104,39 @@ class UserServiceTest {
         Optional<User> loggedUser = userService.login("testUser", "rawPassword");
 
         assertTrue(loggedUser.isPresent());
-        assertNotNull(user.getLastLogin()); 
+        assertNotNull(user.getLastLogin());
         verify(userRepository).save(user);
-
     }
 
     @Test
     void testFindById() {
-        
         User user = new User();
         user.setId(1L);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        
         Optional<User> foundUser = userService.findById(1L);
 
-        
         assertTrue(foundUser.isPresent());
         assertEquals(1L, foundUser.get().getId());
     }
 
     @Test
     void testFindByUsername() {
-        
         User user = new User();
         user.setUsername("testUser");
 
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
 
-        
         Optional<User> foundUser = userService.findByUsername("testUser");
 
-        
         assertTrue(foundUser.isPresent());
         assertEquals("testUser", foundUser.get().getUsername());
     }
 
     @Test
     void testRegisterUser_AssignsRole() {
-
         User user = new User();
-
         user.setUsername("newUser");
         user.setEmail("new@example.com");
         user.setPassword("password123");
@@ -167,52 +148,32 @@ class UserServiceTest {
 
         User registeredUser = userService.registerUser(user);
 
-    
-
         assertEquals(UserRole.USER, registeredUser.getRole());
-
     }
 
     @Test
     void testLogin_IncorrectPassword() {
-
         User user = new User();
         user.setUsername("testUser");
         user.setPassword("encodedPassword");
 
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches("wrongPassword", user.getPassword())).thenReturn(false); 
+        when(passwordEncoder.matches("wrongPassword", user.getPassword())).thenReturn(false);
 
         Optional<User> loggedUser = userService.login("testUser", "wrongPassword");
 
         assertTrue(loggedUser.isEmpty());
-
     }
 
     @Test
     void testRegisterUser_DuplicateUsername() {
-
         User user = new User();
         user.setUsername("existingUser");
         user.setEmail("new@example.com");
 
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(new User()));
 
-        assertThrows(RuntimeException.class, () -> userService.registerUser(user));
-
-    }
-
-    @Test
-        void testRegisterUser_EmailAndUsernameAlreadyExist() {
-
-        User user = new User();
-        user.setUsername("existingUser");
-        user.setEmail("existing@example.com");
-
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(new User()));
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(new User()));
-
-        assertThrows(RuntimeException.class, () -> userService.registerUser(user));
+        assertThrows(UserService.UsernameAlreadyExistsException.class, () -> userService.registerUser(user));
     }
 
 }
