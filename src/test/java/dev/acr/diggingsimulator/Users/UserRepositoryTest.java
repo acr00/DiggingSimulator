@@ -22,20 +22,20 @@ class UserRepositoryTest {
 
     @Test
     void testFindByUsername_Exists() {
-        
         User user = new User();
         user.setUsername("testuser");
         user.setEmail("test@example.com");
+        user.setPassword("testpassword");
+        user.setRole(UserRole.USER);
         entityManager.persist(user);
         entityManager.flush();
-
-        
+    
         Optional<User> found = userRepository.findByUsername("testuser");
-
-        
+    
         assertTrue(found.isPresent());
         assertEquals("testuser", found.get().getUsername());
     }
+    
 
     @Test
     void testFindByUsername_NotExists() {
@@ -48,17 +48,16 @@ class UserRepositoryTest {
 
     @Test
     void testFindByEmail_Exists() {
-        
         User user = new User();
         user.setUsername("testuser");
         user.setEmail("test@example.com");
+        user.setPassword("testpassword"); 
+        user.setRole(UserRole.USER); 
         entityManager.persist(user);
         entityManager.flush();
-
-        
+    
         Optional<User> found = userRepository.findByEmail("test@example.com");
-
-        
+    
         assertTrue(found.isPresent());
         assertEquals("test@example.com", found.get().getEmail());
     }
@@ -74,17 +73,16 @@ class UserRepositoryTest {
 
     @Test
     void testSaveUser() {
-        
         User user = new User();
-        user.setUsername("newuser");
-        user.setEmail("new@example.com");
-
-        
+        user.setUsername("testuser");
+        user.setEmail("test@example.com");
+        user.setPassword("testpassword"); 
+        user.setRole(UserRole.USER); 
+    
         User savedUser = userRepository.save(user);
-
-        
+    
         assertNotNull(savedUser.getId());
-        assertEquals("newuser", savedUser.getUsername());
-        assertEquals("new@example.com", savedUser.getEmail());
+        assertEquals("testuser", savedUser.getUsername());
+        assertEquals("test@example.com", savedUser.getEmail());
     }
 }
