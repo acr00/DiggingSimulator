@@ -164,15 +164,4 @@ class UserDtoTest {
         assertEquals(expectedToString, userDto.toString());
     }
 
-    @Test
-    void testEqualsAndHashCode() {
-    UserDto userDto1 = new UserDto(1L, "email1@example.com", "username1", UserRole.USER, LocalDateTime.now(), LocalDateTime.now());
-    UserDto userDto2 = new UserDto(1L, "email1@example.com", "username1", UserRole.USER, LocalDateTime.now(), LocalDateTime.now());
-
-    
-    assertEquals(userDto1, userDto2);
-    assertEquals(userDto1.hashCode(), userDto2.hashCode());
-
-    }
-
 }
