@@ -2,6 +2,7 @@ package dev.acr.diggingsimulator.Users;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class UserServiceTest {
@@ -29,28 +31,31 @@ class UserServiceTest {
     }
 
     @Test
-    void testRegisterUser_Success() {
-        
-        User user = new User();
-        user.setUsername("newUser");
-        user.setEmail("new@example.com");
-        user.setPassword("password123");
+        void testRegisterUser_Success() {
+    
+    User user = new User();
+    user.setUsername("newUser");
+    user.setEmail("new@example.com");
+    user.setPassword("password123");
 
-        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
-        when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
-        when(userRepository.save(user)).thenReturn(user);
+    when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+    when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
+    when(passwordEncoder.encode(user.getPassword())).thenReturn("encodedPassword");
+    when(userRepository.save(any(User.class))).thenReturn(user);
 
-        
-        User registeredUser = userService.registerUser(user);
+    ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
 
-        
-        assertNotNull(registeredUser);
-        assertEquals(UserRole.USER, registeredUser.getRole());
-        assertNotNull(registeredUser.getCreatedAt());
-        verify(passwordEncoder).encode(user.getPassword());
-        verify(userRepository).save(user);
-    }
+    User registeredUser = userService.registerUser(user);
+
+    assertNotNull(registeredUser);
+    assertEquals(UserRole.USER, registeredUser.getRole());
+    assertNotNull(registeredUser.getCreatedAt());
+
+    verify(passwordEncoder).encode(passwordCaptor.capture());
+    assertEquals("password123", passwordCaptor.getValue());
+
+    verify(userRepository).save(user);
+}
 
     @Test
     void testRegisterUser_DuplicateEmail() {
