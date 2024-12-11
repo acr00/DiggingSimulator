@@ -19,6 +19,9 @@ public class PersonajeService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ExcavacionService excavacionService;
+
     // Crear un nuevo personaje para un usuario
     @Transactional
     public Personaje crearPersonaje(Personaje personaje, Long usuarioId) {
@@ -33,6 +36,11 @@ public class PersonajeService {
 
         personaje.setUsuario(usuario);
         return personajeRepository.save(personaje);
+    }
+
+    @Transactional
+    public List<Object> excavar(Long personajeId, int energiaGastada) {
+        return excavacionService.excavar(personajeId, energiaGastada);
     }
 
     // Obtener personajes de un usuario

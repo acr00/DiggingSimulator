@@ -44,39 +44,76 @@ public class Personaje {
     @PositiveOrZero(message = "La capacidad de carga no puede ser negativa")
     private int capacidadCarga = 50;
 
-    // Métodos de movimiento
+    public Personaje(int posicionX, int posicionY) {
+        this.posicionX = posicionX;
+        this.posicionY = posicionY;
+    }
+
     public void mover(int deltaX, int deltaY) {
         // Validar movimiento dentro de límites (por ejemplo, un mapa de 1000x1000)
         this.posicionX = Math.max(0, Math.min(1000, this.posicionX + deltaX));
         this.posicionY = Math.max(0, Math.min(1000, this.posicionY + deltaY));
-        
+
         // Reducir energía por movimiento
         int costoMovimiento = Math.abs(deltaX) + Math.abs(deltaY);
         this.energia = Math.max(0, this.energia - costoMovimiento);
     }
 
-    // Método para ganar experiencia
     public void ganarExperiencia(int cantidad) {
         this.experiencia += cantidad;
-        
-        // Sistema de subida de nivel simple
-        if (this.experiencia >= 100 * this.nivel) {
+        while (this.experiencia >= 100 * this.nivel) {
             subirNivel();
         }
     }
 
-    // Método para subir de nivel
     private void subirNivel() {
         this.nivel++;
         this.experiencia -= 100 * (this.nivel - 1);
-        
-    // Mejoras al subir de nivel
-        this.energia = Math.min(100 + (this.nivel * 10), 200);
-        this.capacidadCarga += 10;
+        this.energia = Math.min(100 + (this.nivel * 10), 200); // Aumenta el máximo de energía con cada nivel
     }
 
-    // Método para restaurar energía
     public void restaurarEnergia() {
         this.energia = Math.min(100 + (this.nivel * 10), 200);
+    }
+
+    // Getters and setters
+    public int getPosicionX() {
+        return posicionX;
+    }
+
+    public void setPosicionX(int posicionX) {
+        this.posicionX = posicionX;
+    }
+
+    public int getPosicionY() {
+        return posicionY;
+    }
+
+    public void setPosicionY(int posicionY) {
+        this.posicionY = posicionY;
+    }
+
+    public int getEnergia() {
+        return energia;
+    }
+
+    public void setEnergia(int energia) {
+        this.energia = energia;
+    }
+
+    public int getExperiencia() {
+        return experiencia;
+    }
+
+    public void setExperiencia(int experiencia) {
+        this.experiencia = experiencia;
+    }
+
+    public int getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
     }
 }
