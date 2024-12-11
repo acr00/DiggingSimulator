@@ -17,7 +17,7 @@ public class BaulController {
     @PostMapping("/{baulId}/consumibles")
     public ResponseEntity<String> agregarConsumible(@PathVariable Long baulId, @RequestBody Consumible consumible) {
         try {
-            boolean agregado = baulService.agregarConsumible(baulId, consumible);
+            baulService.agregarConsumible(baulId, consumible);
             return ResponseEntity.ok("Consumible agregado exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -27,7 +27,7 @@ public class BaulController {
     @PostMapping("/{baulId}/tesoros")
     public ResponseEntity<String> agregarTesoro(@PathVariable Long baulId, @RequestBody Tesoro tesoro) {
         try {
-            boolean agregado = baulService.agregarTesoro(baulId, tesoro);
+            baulService.agregarTesoro(baulId, tesoro);
             return ResponseEntity.ok("Tesoro agregado exitosamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

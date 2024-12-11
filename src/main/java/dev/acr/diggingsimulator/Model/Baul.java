@@ -57,8 +57,8 @@ public class Baul {
 
     // Método para mejorar la capacidad
     public void mejorarCapacidad() {
-        this.capacidadConsumibles += 5;
-        this.capacidadTesoros += 2;
+        this.capacidadConsumibles += 10;
+        this.capacidadTesoros += 5;
     }
 
     // Getters y Setters
