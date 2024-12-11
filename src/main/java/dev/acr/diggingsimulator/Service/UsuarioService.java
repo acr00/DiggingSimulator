@@ -3,58 +3,71 @@ package dev.acr.diggingsimulator.Service;
 import dev.acr.diggingsimulator.Model.Enums.UserRole;
 import dev.acr.diggingsimulator.Model.Usuario;
 import dev.acr.diggingsimulator.Repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public class UserAlreadyExistsException extends RuntimeException {
+
+        public UserAlreadyExistsException(String message) {
+            super(message);
+        }
+    }
+
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Transactional
     public Usuario registrarUsuario(Usuario usuario) {
-        // Verificar si el usuario o email ya existen
+        validarUsuarioExistente(usuario);
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        return usuarioRepository.save(usuario);
+    }
+
+    private void validarUsuarioExistente(Usuario usuario) {
         if (usuarioRepository.existsByUsername(usuario.getUsername())) {
-            throw new RuntimeException("El nombre de usuario ya existe");
+            throw new UserAlreadyExistsException("El nombre de usuario ya existe");
         }
 
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
-            throw new RuntimeException("El email ya está registrado");
+            throw new UserAlreadyExistsException("El email ya está registrado");
         }
-
-        // Encriptar contraseña
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-
-        // Guardar usuario
-        return usuarioRepository.save(usuario);
     }
 
-    // Método para cambiar rol (solo por admin)
     @Transactional
-    public Usuario cambiarRol(Long usuarioId, UserRole nuevoRol, Usuario admin) {
-        if (!admin.esAdmin()) {
-            throw new SecurityException("Solo un administrador puede cambiar roles");
-        }
+public Usuario cambiarRol(Long usuarioId, UserRole nuevoRol, Usuario admin) {
+    verificarAdmin(admin);
 
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        
-        usuario.setRole(nuevoRol);
-        return usuarioRepository.save(usuario);
+    Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioId);
+    if (usuarioOptional.isEmpty()) {
+        throw new EntityNotFoundException("Usuario no encontrado con id: " + usuarioId);
     }
 
-    // Método para obtener todos los usuarios (solo para admin)
+    Usuario usuario = usuarioOptional.get();
+    usuario.setRole(nuevoRol);
+    return usuarioRepository.save(usuario);
+}
+
     public List<Usuario> obtenerTodosLosUsuarios(Usuario admin) {
-        if (!admin.esAdmin()) {
-            throw new SecurityException("Solo un administrador puede ver todos los usuarios");
-        }
+        verificarAdmin(admin);
         return usuarioRepository.findAll();
+    }
+
+    private void verificarAdmin(Usuario admin) {
+        if (!admin.esAdmin()) {
+            throw new SecurityException("Solo un administrador puede realizar esta acción");
+        }
     }
 }
