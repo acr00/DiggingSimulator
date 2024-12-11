@@ -7,7 +7,7 @@ import dev.acr.diggingsimulator.Model.Tienda;
 import java.util.Optional;
 
 public interface TiendaService {
-    Optional<Tienda> obtenerTiendaPorId(Long id);
+    Optional<Tienda> obtenerTiendaPorId(Long tiendaId);
     float venderTesoro(Long tiendaId, Tesoro tesoro);
     boolean comprarMejora(Long tiendaId, Baul baul);
 }

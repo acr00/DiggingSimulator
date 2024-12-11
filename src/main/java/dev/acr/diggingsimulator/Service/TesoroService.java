@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface TesoroService {
     Tesoro crearTesoro(Tesoro tesoro);
-    Optional<Tesoro> obtenerTesoroPorId(Long id);
+    Optional<Tesoro> obtenerTesoroPorId(Long tesoroId);
     Tesoro actualizarTesoro(Tesoro tesoro);
-    void eliminarTesoro(Long id);
+    void eliminarTesoro(Long tesoroId);
 }

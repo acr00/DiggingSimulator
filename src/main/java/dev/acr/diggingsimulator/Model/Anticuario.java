@@ -8,7 +8,7 @@ public class Anticuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long anticuarioId;
 
     public Anticuario() {
     }

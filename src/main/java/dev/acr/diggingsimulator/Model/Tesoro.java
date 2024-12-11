@@ -10,7 +10,7 @@ public class Tesoro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long tesoroId;
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
@@ -40,12 +40,12 @@ public class Tesoro {
         float estadoModificado = estado / 100;
         return baseValue * estadoModificado * coleccion.getMultiplicadorValor();
     }
-    public Long getId() {
-        return id;
+    public Long getTesoroId() {
+        return tesoroId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTesoroId(Long tesoroId) {
+        this.tesoroId = tesoroId;
     }
 
     public String getNombre() {

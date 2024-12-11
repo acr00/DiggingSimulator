@@ -9,10 +9,10 @@ public class Tienda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long tiendaId;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "tienda_id")
+    @JoinColumn(name = "tiendaId")
     private List<Consumible> inventarioConsumibles;
 
     public Tienda() {
@@ -22,12 +22,12 @@ public class Tienda {
         this.inventarioConsumibles = inventarioConsumibles;
     }
 
-    public Long getId() {
-        return id;
+    public Long getTiendaId() {
+        return tiendaId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTiendaId(Long tiendaId) {
+        this.tiendaId = tiendaId;
     }
 
     public List<Consumible> getInventarioConsumibles() {
@@ -47,7 +47,7 @@ public class Tienda {
     }
 
     public boolean comprarMejora(Baul baul) {
-        if (baul.getCapacidadConsumibles() < 50 && baul.getCapacidadTesoros() < 20) {
+        if (baul.getCapacidadConsumibles() < 100 && baul.getCapacidadTesoros() < 200) {
             baul.mejorarCapacidad();
             return true;
         }

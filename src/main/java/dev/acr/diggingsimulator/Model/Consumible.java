@@ -9,7 +9,7 @@ public class Consumible {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long consumibleId;
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
@@ -37,12 +37,12 @@ public class Consumible {
         System.out.println("Aplicando efecto: " + efecto + " durante " + duracion + " turnos.");
     }
 
-    public Long getId() {
-        return id;
+    public Long getConsumibleId() {
+        return consumibleId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setConsumibleId(Long consumibleId) {
+        this.consumibleId = consumibleId;
     }
 
     public String getNombre() {

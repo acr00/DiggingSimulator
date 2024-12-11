@@ -22,28 +22,28 @@ public class ConsumibleServiceImpl implements ConsumibleService {
     }
 
     @Override
-    public Optional<Consumible> obtenerConsumiblePorId(Long id) {
-        Optional<Consumible> consumibleOptional = consumibleRepository.findById(id);
+    public Optional<Consumible> obtenerConsumiblePorId(Long consumibleId) {
+        Optional<Consumible> consumibleOptional = consumibleRepository.findById(consumibleId);
         if (consumibleOptional.isEmpty()) {
-            throw new EntityNotFoundException("Consumible no encontrado con id: " + id);
+            throw new EntityNotFoundException("Consumible no encontrado con id: " + consumibleId);
         }
         return consumibleOptional;
     }
 
     @Override
 public Consumible actualizarConsumible(Consumible consumible) {
-    Optional<Consumible> existenteOptional = obtenerConsumiblePorId(consumible.getId());
+    Optional<Consumible> existenteOptional = obtenerConsumiblePorId(consumible.getConsumibleId());
     if (existenteOptional.isEmpty()) {
-        throw new EntityNotFoundException("Consumible no encontrado con id: " + consumible.getId());
+        throw new EntityNotFoundException("Consumible no encontrado con id: " + consumible.getConsumibleId());
     }
     return consumibleRepository.save(consumible);
     }
 
     @Override
-public void eliminarConsumible(Long id) {
-    Optional<Consumible> existenteOptional = obtenerConsumiblePorId(id);
+public void eliminarConsumible(Long consumibleId) {
+    Optional<Consumible> existenteOptional = obtenerConsumiblePorId(consumibleId);
     if (existenteOptional.isEmpty()) {
-        throw new EntityNotFoundException("Consumible no encontrado con id: " + id);
+        throw new EntityNotFoundException("Consumible no encontrado con id: " + consumibleId);
     }
     consumibleRepository.delete(existenteOptional.get());
     }

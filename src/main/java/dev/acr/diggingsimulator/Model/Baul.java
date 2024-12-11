@@ -10,7 +10,7 @@ public class Baul {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long baulId;
 
     @Column(name = "capacidad_consumibles")
     private int capacidadConsumibles;
@@ -19,11 +19,11 @@ public class Baul {
     private int capacidadTesoros;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "baul_id")
+    @JoinColumn(name = "baul_Id")
     private List<Consumible> consumibles = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "baul_id")
+    @JoinColumn(name = "baul_Id")
     private List<Tesoro> tesoros = new ArrayList<>();
 
     public Baul() {
@@ -36,37 +36,37 @@ public class Baul {
         this.capacidadTesoros = capacidadTesoros;
     }
 
-    public enum ResultadoAgregar {
+    public enum CapacidadStatus {
         OK,
         CAPACIDAD_LLENA
     }
 
-    public ResultadoAgregar agregarConsumible(Consumible consumible) {
+    public CapacidadStatus agregarConsumible(Consumible consumible) {
         if (consumibles.size() < capacidadConsumibles) {
             consumibles.add(consumible);
-            return ResultadoAgregar.OK;
+            return CapacidadStatus.OK;
         }
-        return ResultadoAgregar.CAPACIDAD_LLENA;
+        return CapacidadStatus.CAPACIDAD_LLENA;
     }
 
-    public ResultadoAgregar agregarTesoro(Tesoro tesoro) {
+    public CapacidadStatus agregarTesoro(Tesoro tesoro) {
         if (tesoros.size() < capacidadTesoros) {
             tesoros.add(tesoro);
-            return ResultadoAgregar.OK;
+            return CapacidadStatus.OK;
         }
-        return ResultadoAgregar.CAPACIDAD_LLENA;
+        return CapacidadStatus.CAPACIDAD_LLENA;
     }
 
     public void mejorarCapacidad() {
         this.capacidadConsumibles += 10;
         this.capacidadTesoros += 5;
     }
-    public Long getId() {
-        return id;
+    public Long getBaulId() {
+        return baulId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setBaulId(Long baulId) {
+        this.baulId = baulId;
     }
 
     public int getCapacidadConsumibles() {
@@ -100,6 +100,7 @@ public class Baul {
     public void setTesoros(List<Tesoro> tesoros) {
         this.tesoros = tesoros;
     }
+
     public int getNumeroConsumibles() {
         return consumibles.size();
     }

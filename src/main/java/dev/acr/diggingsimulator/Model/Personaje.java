@@ -17,7 +17,7 @@ public class Personaje {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long personajeId;
 
     @NotBlank(message = "El nombre del personaje es obligatorio")
     @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
@@ -31,7 +31,7 @@ public class Personaje {
 
     @NotNull(message = "El usuario propietario es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuarioId")
     private Usuario usuario;
 
     @Min(value = 1, message = "El nivel mínimo es 1")
@@ -47,7 +47,7 @@ public class Personaje {
     private int capacidadCarga = 50;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "baul_id", referencedColumnName = "id")
+    @JoinColumn(name = "baulId", referencedColumnName = "baulId")
     private Baul baul;
 
     @Column(name = "ultima_regeneracion_energia")
@@ -92,7 +92,7 @@ public class Personaje {
         this.ultimaRegeneracionEnergia = ahora;
     }
     
-    public Baul.ResultadoAgregar agregarObjetoABaul(Object objeto) {
+    public Baul.CapacidadStatus agregarObjetoABaul(Object objeto) {
         if (objeto instanceof Consumible consumible) {
             return baul.agregarConsumible(consumible);
         } else if (objeto instanceof Tesoro tesoro) {

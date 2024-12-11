@@ -24,8 +24,8 @@ public class TiendaServiceImpl implements TiendaService {
     }
 
     @Override
-    public Optional<Tienda> obtenerTiendaPorId(Long id) {
-        return tiendaRepository.findById(id);
+    public Optional<Tienda> obtenerTiendaPorId(Long tiendaId) {
+        return tiendaRepository.findById(tiendaId);
     }
 
     @Override
@@ -37,10 +37,8 @@ public class TiendaServiceImpl implements TiendaService {
     @Override
     public boolean comprarMejora(Long tiendaId, Baul baul) {
         Tienda tienda = obtenerTiendaExistente(tiendaId);
-        if (!tienda.comprarMejora(baul)) {
-            throw new IllegalStateException("No se pudo comprar la mejora, los límites ya fueron alcanzados.");
-        }
-        return true;
+        return tienda.comprarMejora(baul);
     }
+
 }
 

@@ -9,16 +9,15 @@ import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    // Método para buscar usuario por username
+  
     Optional<Usuario> findByUsername(String username);
 
-    // Método para buscar usuario por email
+   
     Optional<Usuario> findByEmail(String email);
 
-    // Método para verificar si existe un usuario con un username
     boolean existsByUsername(String username);
 
-    // Método para verificar si existe un usuario con un email
+   
     boolean existsByEmail(String email);
 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Personaje p WHERE p.usuario.id = :usuarioId")

@@ -23,24 +23,24 @@ public class TesoroServiceImpl implements TesoroService {
     }
 
         @Override
-    public Optional<Tesoro> obtenerTesoroPorId(Long id) {
-        Optional<Tesoro> tesoroOptional = tesoroRepository.findById(id);
+    public Optional<Tesoro> obtenerTesoroPorId(Long tesoroId) {
+        Optional<Tesoro> tesoroOptional = tesoroRepository.findById(tesoroId);
         if (tesoroOptional.isEmpty()) {
-            throw new EntityNotFoundException("Consumible no encontrado con id: " + id);
+            throw new EntityNotFoundException("Tesoro no encontrado con id: " + tesoroId);
         }
         return tesoroOptional;
     }
 
     @Override
     public Tesoro actualizarTesoro(Tesoro tesoro) {
-        obtenerTesoroPorId(tesoro.getId());
+        obtenerTesoroPorId(tesoro.getTesoroId());
         return tesoroRepository.save(tesoro);
     }
     @Override
-public void eliminarTesoro(Long id) {
-    Optional<Tesoro> existenteOptional = obtenerTesoroPorId(id);
+public void eliminarTesoro(Long tesoroId) {
+    Optional<Tesoro> existenteOptional = obtenerTesoroPorId(tesoroId);
     if (existenteOptional.isEmpty()) {
-        throw new EntityNotFoundException("Consumible no encontrado con id: " + id);
+        throw new EntityNotFoundException("Tesoro no encontrado con id: " + tesoroId);
     }
     tesoroRepository.delete(existenteOptional.get());
     }

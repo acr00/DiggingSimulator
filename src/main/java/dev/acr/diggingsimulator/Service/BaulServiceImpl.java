@@ -35,7 +35,7 @@ public class BaulServiceImpl implements BaulService {
 
     @Override
     public Baul actualizarBaul(Baul baul) {
-        obtenerBaulExistente(baul.getId());
+        obtenerBaulExistente(baul.getBaulId());
         return baulRepository.save(baul);
     }
 
@@ -46,18 +46,18 @@ public class BaulServiceImpl implements BaulService {
     }
 
     @Override
-    public Baul.ResultadoAgregar agregarConsumible(Long baulId, Consumible consumible) {
+    public Baul.CapacidadStatus agregarConsumible(Long baulId, Consumible consumible) {
         return agregarObjetoABaul(baulId, consumible);
     }
 
     @Override
-    public Baul.ResultadoAgregar agregarTesoro(Long baulId, Tesoro tesoro) {
+    public Baul.CapacidadStatus agregarTesoro(Long baulId, Tesoro tesoro) {
         return agregarObjetoABaul(baulId, tesoro);
     }
 
-    private Baul.ResultadoAgregar agregarObjetoABaul(Long baulId, Object objeto) {
+    private Baul.CapacidadStatus agregarObjetoABaul(Long baulId, Object objeto) {
         Baul baul = obtenerBaulExistente(baulId);
-        Baul.ResultadoAgregar resultado;
+        Baul.CapacidadStatus resultado;
 
         if (objeto instanceof Consumible consumible) {
             resultado = baul.agregarConsumible(consumible);
@@ -67,7 +67,7 @@ public class BaulServiceImpl implements BaulService {
             throw new IllegalArgumentException("El objeto debe ser un Consumible o Tesoro.");
         }
 
-        if (resultado == Baul.ResultadoAgregar.OK) {
+        if (resultado == Baul.CapacidadStatus.OK) {
             baulRepository.save(baul);
         }
 

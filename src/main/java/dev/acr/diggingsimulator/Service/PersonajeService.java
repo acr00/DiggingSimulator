@@ -53,7 +53,7 @@ public class PersonajeService {
         return personajeRepository.save(personaje);
     }
 
-    public Baul.ResultadoAgregar agregarObjetoABaul(Long personajeId, Object objeto) {
+    public Baul.CapacidadStatus agregarObjetoABaul(Long personajeId, Object objeto) {
         Personaje personaje = obtenerPersonajeExistente(personajeId);
         return personaje.agregarObjetoABaul(objeto);
     }
