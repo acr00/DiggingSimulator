@@ -1,7 +1,7 @@
 package dev.acr.diggingsimulator.Model;
 
-import dev.acr.diggingsimulator.Model.Enums.Rareza;
 import dev.acr.diggingsimulator.Model.Enums.Coleccion;
+import dev.acr.diggingsimulator.Model.Enums.Rareza;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,16 +20,14 @@ public class Tesoro {
     private Rareza rareza;
 
     @Column(name = "estado")
-    private float estado; 
+    private float estado;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "coleccion", nullable = false)
     private Coleccion coleccion;
 
-    
     public Tesoro() {}
 
-    
     public Tesoro(String nombre, Rareza rareza, float estado, Coleccion coleccion) {
         this.nombre = nombre;
         this.rareza = rareza;
@@ -37,12 +35,11 @@ public class Tesoro {
         this.coleccion = coleccion;
     }
 
-    
     public float calcularValor() {
-        float baseValue = rareza.ordinal() * 100; 
-        return baseValue * estado; 
+        float baseValue = rareza.getValorBase();
+        float estadoModificado = estado / 100;
+        return baseValue * estadoModificado * coleccion.getMultiplicadorValor();
     }
-
     public Long getId() {
         return id;
     }
