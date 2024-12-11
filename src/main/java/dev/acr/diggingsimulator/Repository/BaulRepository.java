@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BaulRepository extends JpaRepository<Baul, Long> {
-    // Puedes agregar métodos personalizados si es necesario más adelante
 }

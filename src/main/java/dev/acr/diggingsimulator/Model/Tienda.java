@@ -56,9 +56,9 @@ public class Tienda {
 
     public float venderTesoro(Tesoro tesoro) {
         if (tesoro != null) {
-            return tesoro.calcularValor(); // El método calcularValor ya existe en Tesoro
+            return tesoro.calcularValor(); 
         }
-        return 0.0f; // Si el tesoro es nulo, no devuelve monedas
+        return 0.0f; 
     }
 }
 

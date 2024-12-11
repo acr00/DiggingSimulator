@@ -38,7 +38,7 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private UserRole role = UserRole.USER; // Rol por defecto
+    private UserRole role = UserRole.USER; 
 
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
@@ -48,12 +48,11 @@ public class Usuario {
         fechaRegistro = LocalDateTime.now();
     }
 
-    // Método para verificar si el usuario es admin
+    
     public boolean esAdmin() {
         return this.role == UserRole.ADMIN;
     }
 
-    // Método para cambiar rol (solo para admin)
     public void cambiarRol(UserRole nuevoRol) {
         if (this.esAdmin()) {
             this.role = nuevoRol;
@@ -61,12 +60,10 @@ public class Usuario {
             throw new SecurityException("Solo un administrador puede cambiar roles");
         }
     }
-    // Método para registrarse (validaciones básicas)
     public boolean registrarse() {
         return this.username != null && !this.username.isEmpty() 
                && this.password != null && this.password.length() >= 8;
     }
-    // Método para actualizar moneda
     public void actualizarMoneda(float cantidad) {
         if (this.moneda + cantidad >= 0) {
             this.moneda += cantidad;

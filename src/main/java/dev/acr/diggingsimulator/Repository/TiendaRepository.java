@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TiendaRepository extends JpaRepository<Tienda, Long> {
-    // puedes añadir consultas personalizadas si es necesario
 }

@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AnticuarioRepository extends JpaRepository<Anticuario, Long> {
-    // añadir consultas personalizadas si es necesario
 }
