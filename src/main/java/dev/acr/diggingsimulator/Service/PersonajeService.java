@@ -22,16 +22,13 @@ public class PersonajeService {
     @Autowired
     private ExcavacionService excavacionService;
 
-    // Crear un nuevo personaje para un usuario
     @Transactional
     public Personaje crearPersonaje(Personaje personaje, Long usuarioId) {
-        // Verificar límite de personajes por usuario (por ejemplo, máximo 3)
         Usuario usuario = usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         
-        int contadorPersonajes = personajeRepository.countByUsuario(usuario);
-        if (contadorPersonajes >= 3) {
-            throw new RuntimeException("Límite máximo de personajes alcanzado");
+        if (usuarioRepository.hasPersonaje(usuarioId)) {
+            throw new RuntimeException("El usuario ya tiene un personaje");
         }
 
         personaje.setUsuario(usuario);
@@ -40,14 +37,21 @@ public class PersonajeService {
 
     @Transactional
     public List<Object> excavar(Long personajeId, int energiaGastada) {
-        return excavacionService.excavar(personajeId, energiaGastada);
+        Personaje personaje = personajeRepository.findById(personajeId)
+                .orElseThrow(() -> new RuntimeException("Personaje no encontrado"));
+
+        List<Object> objetosEncontrados = excavacionService.excavar(personajeId, energiaGastada);
+
+        // Actualizar el personaje después de la excavación
+        personajeRepository.save(personaje);
+
+        return objetosEncontrados;
     }
 
-    // Obtener personajes de un usuario
     public List<Personaje> obtenerPersonajesDeUsuario(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        
+       
         return personajeRepository.findByUsuario(usuario);
     }
 
