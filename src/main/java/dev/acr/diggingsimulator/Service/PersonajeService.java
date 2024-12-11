@@ -57,7 +57,7 @@ public class PersonajeService {
             throw new RuntimeException("Energía insuficiente para excavar");
         }
 
-        List<Object> objetosEncontrados = new ExcavacionService().excavar(personajeId, energiaGastada);
+        List<Object> objetosEncontrados = new ExcavacionService(personajeRepository, null, null).excavar(personajeId, energiaGastada);
 
         personaje.setEnergia(personaje.getEnergia() - energiaGastada);
         personajeRepository.save(personaje);
