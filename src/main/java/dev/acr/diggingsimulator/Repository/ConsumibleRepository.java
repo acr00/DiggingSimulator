@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ConsumibleRepository extends JpaRepository<Consumible, Long> {
-    // Puedes agregar métodos personalizados si los necesitas
+    //agregar métodos personalizados si los necesitas
 }

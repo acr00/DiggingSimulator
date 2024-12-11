@@ -15,6 +15,11 @@ public class BaulServiceImpl implements BaulService {
     @Autowired
     private BaulRepository baulRepository;
 
+    private Baul obtenerBaulExistente(Long baulId) {
+        return baulRepository.findById(baulId)
+                .orElseThrow(() -> new RuntimeException("Baúl no encontrado con id: " + baulId));
+    }
+
     @Override
     public Baul crearBaul(Baul baul) {
         return baulRepository.save(baul);
@@ -27,50 +32,33 @@ public class BaulServiceImpl implements BaulService {
 
     @Override
     public Baul actualizarBaul(Baul baul) {
-        if (baulRepository.existsById(baul.getId())) {
-            return baulRepository.save(baul);
-        } else {
-            throw new RuntimeException("Baúl no encontrado con id: " + baul.getId());
-        }
+        obtenerBaulExistente(baul.getId());
+        return baulRepository.save(baul);
     }
 
     @Override
     public void eliminarBaul(Long id) {
-        if (baulRepository.existsById(id)) {
-            baulRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Baúl no encontrado con id: " + id);
-        }
-    }
-    @Override
-    public boolean agregarConsumible(Long baulId, Consumible consumible) {
-        Optional<Baul> baulOptional = baulRepository.findById(baulId);
-        if (baulOptional.isPresent()) {
-            Baul baul = baulOptional.get();
-            if (baul.agregarConsumible(consumible)) {
-                baulRepository.save(baul);
-                return true;
-            } else {
-                throw new RuntimeException("El baúl está lleno para consumibles.");
-            }
-        } else {
-            throw new RuntimeException("Baúl no encontrado con id: " + baulId);
-        }
+        obtenerBaulExistente(id);
+        baulRepository.deleteById(id);
     }
 
     @Override
-    public boolean agregarTesoro(Long baulId, Tesoro tesoro) {
-        Optional<Baul> baulOptional = baulRepository.findById(baulId);
-        if (baulOptional.isPresent()) {
-            Baul baul = baulOptional.get();
-            if (baul.agregarTesoro(tesoro)) {
-                baulRepository.save(baul);
-                return true;
-            } else {
-                throw new RuntimeException("El baúl está lleno para tesoros.");
-            }
-        } else {
-            throw new RuntimeException("Baúl no encontrado con id: " + baulId);
+    public Baul.ResultadoAgregar agregarConsumible(Long baulId, Consumible consumible) {
+        Baul baul = obtenerBaulExistente(baulId);
+        Baul.ResultadoAgregar resultado = baul.agregarConsumible(consumible);
+        if (resultado == Baul.ResultadoAgregar.OK) {
+            baulRepository.save(baul);
         }
+        return resultado;
+    }
+
+    @Override
+    public Baul.ResultadoAgregar agregarTesoro(Long baulId, Tesoro tesoro) {
+        Baul baul = obtenerBaulExistente(baulId);
+        Baul.ResultadoAgregar resultado = baul.agregarTesoro(tesoro);
+        if (resultado == Baul.ResultadoAgregar.OK) {
+            baulRepository.save(baul);
+        }
+        return resultado;
     }
 }

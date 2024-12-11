@@ -1,6 +1,7 @@
 package dev.acr.diggingsimulator.Service;
 
 import dev.acr.diggingsimulator.Model.Baul;
+import dev.acr.diggingsimulator.Model.Baul.ResultadoAgregar;
 import dev.acr.diggingsimulator.Model.Consumible;
 import dev.acr.diggingsimulator.Model.Tesoro;
 
@@ -12,8 +13,8 @@ public interface BaulService {
     Baul actualizarBaul(Baul baul);
     void eliminarBaul(Long id);
 
-    boolean agregarConsumible(Long baulId, Consumible consumible);
-    boolean agregarTesoro(Long baulId, Tesoro tesoro);
+    ResultadoAgregar agregarConsumible(Long baulId, Consumible consumible);
+    ResultadoAgregar agregarTesoro(Long baulId, Tesoro tesoro);
 }
 
 

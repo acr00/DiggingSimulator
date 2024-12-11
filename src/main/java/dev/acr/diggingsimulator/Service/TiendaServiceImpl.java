@@ -15,6 +15,11 @@ public class TiendaServiceImpl implements TiendaService {
     @Autowired
     private TiendaRepository tiendaRepository;
 
+    private Tienda obtenerTiendaExistente(Long tiendaId) {
+        return tiendaRepository.findById(tiendaId)
+                .orElseThrow(() -> new RuntimeException("Tienda no encontrada con id: " + tiendaId));
+    }
+
     @Override
     public Optional<Tienda> obtenerTiendaPorId(Long id) {
         return tiendaRepository.findById(id);
@@ -22,20 +27,17 @@ public class TiendaServiceImpl implements TiendaService {
 
     @Override
     public float venderTesoro(Long tiendaId, Tesoro tesoro) {
-        Optional<Tienda> tiendaOptional = tiendaRepository.findById(tiendaId);
-        if (tiendaOptional.isPresent()) {
-            return tiendaOptional.get().venderTesoro(tesoro);
-        }
-        throw new RuntimeException("Tienda no encontrada con id: " + tiendaId);
+        Tienda tienda = obtenerTiendaExistente(tiendaId);
+        return tienda.venderTesoro(tesoro);
     }
 
     @Override
     public boolean comprarMejora(Long tiendaId, Baul baul) {
-        Optional<Tienda> tiendaOptional = tiendaRepository.findById(tiendaId);
-        if (tiendaOptional.isPresent()) {
-            return tiendaOptional.get().comprarMejora(baul);
+        Tienda tienda = obtenerTiendaExistente(tiendaId);
+        if (tienda.comprarMejora(baul)) {
+            return true;
         }
-        throw new RuntimeException("Tienda no encontrada con id: " + tiendaId);
+        throw new RuntimeException("No se pudo comprar la mejora, los límites ya fueron alcanzados.");
     }
 }
 
