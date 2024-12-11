@@ -4,6 +4,8 @@ import dev.acr.diggingsimulator.Model.Anticuario;
 import dev.acr.diggingsimulator.Model.Tesoro;
 import dev.acr.diggingsimulator.Repository.AnticuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +13,7 @@ public class AnticuarioServiceImpl implements AnticuarioService {
 
     private final AnticuarioRepository anticuarioRepository;
 
+    @Autowired
     public AnticuarioServiceImpl(AnticuarioRepository anticuarioRepository) {
         this.anticuarioRepository = anticuarioRepository;
     }
