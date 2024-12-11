@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TesoroRepository extends JpaRepository<Tesoro, Long> {
-    // Puedes agregar métodos personalizados si los necesitas
 }
