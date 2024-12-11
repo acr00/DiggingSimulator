@@ -2,7 +2,7 @@ package dev.acr.diggingsimulator.Model.Enums;
 
 public enum TipoEfecto {
     AUMENTAR_PROBABILIDAD_TESOROS("Aumenta la probabilidad de encontrar tesoros raros", 0.2f),
-    VELOCIDAD("Incrementa la velocidad de movimiento del personaje", 1.5f);
+    VELOCIDAD("Incrementa el valor al vender el siguiente objeto", 1.5f);
     
 
     private final String descripcion;
