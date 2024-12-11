@@ -18,13 +18,10 @@ public class BaulServiceImpl implements BaulService {
         this.baulRepository = baulRepository;
     }
 
-private Baul obtenerBaulExistente(Long baulId) {
-    Optional<Baul> baulOptional = baulRepository.findById(baulId);
-    if (baulOptional.isEmpty()) {
-        throw new EntityNotFoundException("Baúl no encontrado con id: " + baulId);
+    private Baul obtenerBaulExistente(Long baulId) {
+        return baulRepository.findById(baulId)
+                .orElseThrow(() -> new EntityNotFoundException("Baúl no encontrado con id: " + baulId));
     }
-    return baulOptional.get();
-}
 
     @Override
     public Baul crearBaul(Baul baul) {
@@ -50,15 +47,15 @@ private Baul obtenerBaulExistente(Long baulId) {
 
     @Override
     public Baul.ResultadoAgregar agregarConsumible(Long baulId, Consumible consumible) {
-        return agregarObjetoAlBaul(baulId, consumible);
+        return agregarObjetoABaul(baulId, consumible);
     }
 
     @Override
     public Baul.ResultadoAgregar agregarTesoro(Long baulId, Tesoro tesoro) {
-        return agregarObjetoAlBaul(baulId, tesoro);
+        return agregarObjetoABaul(baulId, tesoro);
     }
 
-    private Baul.ResultadoAgregar agregarObjetoAlBaul(Long baulId, Object objeto) {
+    private Baul.ResultadoAgregar agregarObjetoABaul(Long baulId, Object objeto) {
         Baul baul = obtenerBaulExistente(baulId);
         Baul.ResultadoAgregar resultado;
 

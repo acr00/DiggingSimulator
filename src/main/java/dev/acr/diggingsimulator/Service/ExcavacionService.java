@@ -94,4 +94,6 @@ public class ExcavacionService {
         int duracion = random.nextInt(5) + 1;
         return new Consumible("Consumible encontrado", efecto, duracion);
     }
+    
 }
+

@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UsuarioService {
 
     public class UserAlreadyExistsException extends RuntimeException {
-
         public UserAlreadyExistsException(String message) {
+            super(message);
+        }
+    }
+
+    public class AccessDeniedException extends RuntimeException {
+        public AccessDeniedException(String message) {
             super(message);
         }
     }
@@ -47,18 +51,14 @@ public class UsuarioService {
     }
 
     @Transactional
-public Usuario cambiarRol(Long usuarioId, UserRole nuevoRol, Usuario admin) {
-    verificarAdmin(admin);
+    public Usuario cambiarRol(Long usuarioId, UserRole nuevoRol, Usuario admin) {
+        verificarAdmin(admin);
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-    Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioId);
-    if (usuarioOptional.isEmpty()) {
-        throw new EntityNotFoundException("Usuario no encontrado con id: " + usuarioId);
+        usuario.setRole(nuevoRol);
+        return usuarioRepository.save(usuario);
     }
-
-    Usuario usuario = usuarioOptional.get();
-    usuario.setRole(nuevoRol);
-    return usuarioRepository.save(usuario);
-}
 
     public List<Usuario> obtenerTodosLosUsuarios(Usuario admin) {
         verificarAdmin(admin);
@@ -67,7 +67,7 @@ public Usuario cambiarRol(Long usuarioId, UserRole nuevoRol, Usuario admin) {
 
     private void verificarAdmin(Usuario admin) {
         if (!admin.esAdmin()) {
-            throw new SecurityException("Solo un administrador puede realizar esta acción");
+            throw new AccessDeniedException("Solo un administrador puede realizar esta acción");
         }
     }
 }

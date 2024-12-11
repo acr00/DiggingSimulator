@@ -1,6 +1,5 @@
 package dev.acr.diggingsimulator.Service;
 
-import dev.acr.diggingsimulator.Model.Consumible;
 import dev.acr.diggingsimulator.Model.Tesoro;
 import dev.acr.diggingsimulator.Repository.TesoroRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -45,5 +44,5 @@ public void eliminarTesoro(Long id) {
     }
     tesoroRepository.delete(existenteOptional.get());
     }
-    
+
 }

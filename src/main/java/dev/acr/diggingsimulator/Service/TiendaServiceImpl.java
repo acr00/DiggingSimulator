@@ -19,11 +19,8 @@ public class TiendaServiceImpl implements TiendaService {
     }
 
     private Tienda obtenerTiendaExistente(Long tiendaId) {
-        Optional<Tienda> tiendaOptional = tiendaRepository.findById(tiendaId);
-        if (tiendaOptional.isEmpty()) {
-            throw new EntityNotFoundException("Tienda no encontrada con id: " + tiendaId);
-        }
-        return tiendaOptional.get();
+        return tiendaRepository.findById(tiendaId)
+                .orElseThrow(() -> new EntityNotFoundException("Tienda no encontrada con id: " + tiendaId));
     }
 
     @Override
