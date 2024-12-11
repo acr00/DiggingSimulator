@@ -2,7 +2,7 @@ package dev.acr.diggingsimulator.Service;
 
 import dev.acr.diggingsimulator.Model.Tesoro;
 import dev.acr.diggingsimulator.Repository.TesoroRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -10,8 +10,11 @@ import java.util.Optional;
 @Service
 public class TesoroServiceImpl implements TesoroService {
 
-    @Autowired
-    private TesoroRepository tesoroRepository;
+    private final TesoroRepository tesoroRepository;
+
+    public TesoroServiceImpl(TesoroRepository tesoroRepository) {
+        this.tesoroRepository = tesoroRepository;
+    }
 
     @Override
     public Tesoro crearTesoro(Tesoro tesoro) {
@@ -20,24 +23,28 @@ public class TesoroServiceImpl implements TesoroService {
 
     @Override
     public Optional<Tesoro> obtenerTesoroPorId(Long id) {
-        return tesoroRepository.findById(id);
+        Optional<Tesoro> tesoroOptional = tesoroRepository.findById(id);
+        if (tesoroOptional.isEmpty()) {
+            throw new EntityNotFoundException("Tesoro no encontrado con id: " + id);
+        }
+        return tesoroOptional;
     }
 
     @Override
     public Tesoro actualizarTesoro(Tesoro tesoro) {
-        if (tesoroRepository.existsById(tesoro.getId())) {
-            return tesoroRepository.save(tesoro);
-        } else {
-            throw new RuntimeException("Tesoro no encontrado con id: " + tesoro.getId());
+        Optional<Tesoro> existenteOptional = obtenerTesoroPorId(tesoro.getId());
+        if (existenteOptional.isEmpty()) {
+            throw new EntityNotFoundException("Tesoro no encontrado con id: " + tesoro.getId());
         }
+        return tesoroRepository.save(tesoro);
     }
 
     @Override
     public void eliminarTesoro(Long id) {
-        if (tesoroRepository.existsById(id)) {
-            tesoroRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Tesoro no encontrado con id: " + id);
+        Optional<Tesoro> existenteOptional = obtenerTesoroPorId(id);
+        if (existenteOptional.isEmpty()) {
+            throw new EntityNotFoundException("Tesoro no encontrado con id: " + id);
         }
+        tesoroRepository.delete(existenteOptional.get());
     }
 }

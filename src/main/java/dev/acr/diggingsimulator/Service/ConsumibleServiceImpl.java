@@ -2,7 +2,7 @@ package dev.acr.diggingsimulator.Service;
 
 import dev.acr.diggingsimulator.Model.Consumible;
 import dev.acr.diggingsimulator.Repository.ConsumibleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -10,8 +10,11 @@ import java.util.Optional;
 @Service
 public class ConsumibleServiceImpl implements ConsumibleService {
 
-    @Autowired
-    private ConsumibleRepository consumibleRepository;
+    private final ConsumibleRepository consumibleRepository;
+
+    public ConsumibleServiceImpl(ConsumibleRepository consumibleRepository) {
+        this.consumibleRepository = consumibleRepository;
+    }
 
     @Override
     public Consumible crearConsumible(Consumible consumible) {
@@ -20,24 +23,29 @@ public class ConsumibleServiceImpl implements ConsumibleService {
 
     @Override
     public Optional<Consumible> obtenerConsumiblePorId(Long id) {
-        return consumibleRepository.findById(id);
+        Optional<Consumible> consumibleOptional = consumibleRepository.findById(id);
+        if (consumibleOptional.isEmpty()) {
+            throw new EntityNotFoundException("Consumible no encontrado con id: " + id);
+        }
+        return consumibleOptional;
     }
 
     @Override
-    public Consumible actualizarConsumible(Consumible consumible) {
-        if (consumibleRepository.existsById(consumible.getId())) {
-            return consumibleRepository.save(consumible);
-        } else {
-            throw new RuntimeException("Consumible no encontrado con id: " + consumible.getId());
-        }
+public Consumible actualizarConsumible(Consumible consumible) {
+    Optional<Consumible> existenteOptional = obtenerConsumiblePorId(consumible.getId());
+    if (existenteOptional.isEmpty()) {
+        throw new EntityNotFoundException("Consumible no encontrado con id: " + consumible.getId());
+    }
+    return consumibleRepository.save(consumible);
     }
 
     @Override
-    public void eliminarConsumible(Long id) {
-        if (consumibleRepository.existsById(id)) {
-            consumibleRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Consumible no encontrado con id: " + id);
-        }
+public void eliminarConsumible(Long id) {
+    Optional<Consumible> existenteOptional = obtenerConsumiblePorId(id);
+    if (existenteOptional.isEmpty()) {
+        throw new EntityNotFoundException("Consumible no encontrado con id: " + id);
     }
+    consumibleRepository.delete(existenteOptional.get());
+    }
+
 }

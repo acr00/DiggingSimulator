@@ -4,7 +4,7 @@ import dev.acr.diggingsimulator.Model.Baul;
 import dev.acr.diggingsimulator.Model.Tienda;
 import dev.acr.diggingsimulator.Model.Tesoro;
 import dev.acr.diggingsimulator.Repository.TiendaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,12 +12,18 @@ import java.util.Optional;
 @Service
 public class TiendaServiceImpl implements TiendaService {
 
-    @Autowired
-    private TiendaRepository tiendaRepository;
+    private final TiendaRepository tiendaRepository;
+
+    public TiendaServiceImpl(TiendaRepository tiendaRepository) {
+        this.tiendaRepository = tiendaRepository;
+    }
 
     private Tienda obtenerTiendaExistente(Long tiendaId) {
-        return tiendaRepository.findById(tiendaId)
-                .orElseThrow(() -> new RuntimeException("Tienda no encontrada con id: " + tiendaId));
+        Optional<Tienda> tiendaOptional = tiendaRepository.findById(tiendaId);
+        if (tiendaOptional.isEmpty()) {
+            throw new EntityNotFoundException("Tienda no encontrada con id: " + tiendaId);
+        }
+        return tiendaOptional.get();
     }
 
     @Override
@@ -34,10 +40,10 @@ public class TiendaServiceImpl implements TiendaService {
     @Override
     public boolean comprarMejora(Long tiendaId, Baul baul) {
         Tienda tienda = obtenerTiendaExistente(tiendaId);
-        if (tienda.comprarMejora(baul)) {
-            return true;
+        if (!tienda.comprarMejora(baul)) {
+            throw new IllegalStateException("No se pudo comprar la mejora, los límites ya fueron alcanzados.");
         }
-        throw new RuntimeException("No se pudo comprar la mejora, los límites ya fueron alcanzados.");
+        return true;
     }
 }
 

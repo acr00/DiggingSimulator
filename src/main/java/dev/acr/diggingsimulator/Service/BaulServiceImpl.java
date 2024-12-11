@@ -4,7 +4,7 @@ import dev.acr.diggingsimulator.Model.Baul;
 import dev.acr.diggingsimulator.Model.Tesoro;
 import dev.acr.diggingsimulator.Model.Consumible;
 import dev.acr.diggingsimulator.Repository.BaulRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,13 +12,19 @@ import java.util.Optional;
 @Service
 public class BaulServiceImpl implements BaulService {
 
-    @Autowired
-    private BaulRepository baulRepository;
+    private final BaulRepository baulRepository;
 
-    private Baul obtenerBaulExistente(Long baulId) {
-        return baulRepository.findById(baulId)
-                .orElseThrow(() -> new RuntimeException("Baúl no encontrado con id: " + baulId));
+    public BaulServiceImpl(BaulRepository baulRepository) {
+        this.baulRepository = baulRepository;
     }
+
+private Baul obtenerBaulExistente(Long baulId) {
+    Optional<Baul> baulOptional = baulRepository.findById(baulId);
+    if (baulOptional.isEmpty()) {
+        throw new EntityNotFoundException("Baúl no encontrado con id: " + baulId);
+    }
+    return baulOptional.get();
+}
 
     @Override
     public Baul crearBaul(Baul baul) {
@@ -38,27 +44,36 @@ public class BaulServiceImpl implements BaulService {
 
     @Override
     public void eliminarBaul(Long id) {
-        obtenerBaulExistente(id);
-        baulRepository.deleteById(id);
+        Baul baul = obtenerBaulExistente(id);
+        baulRepository.delete(baul);
     }
 
     @Override
     public Baul.ResultadoAgregar agregarConsumible(Long baulId, Consumible consumible) {
-        Baul baul = obtenerBaulExistente(baulId);
-        Baul.ResultadoAgregar resultado = baul.agregarConsumible(consumible);
-        if (resultado == Baul.ResultadoAgregar.OK) {
-            baulRepository.save(baul);
-        }
-        return resultado;
+        return agregarObjetoAlBaul(baulId, consumible);
     }
 
     @Override
     public Baul.ResultadoAgregar agregarTesoro(Long baulId, Tesoro tesoro) {
+        return agregarObjetoAlBaul(baulId, tesoro);
+    }
+
+    private Baul.ResultadoAgregar agregarObjetoAlBaul(Long baulId, Object objeto) {
         Baul baul = obtenerBaulExistente(baulId);
-        Baul.ResultadoAgregar resultado = baul.agregarTesoro(tesoro);
+        Baul.ResultadoAgregar resultado;
+
+        if (objeto instanceof Consumible consumible) {
+            resultado = baul.agregarConsumible(consumible);
+        } else if (objeto instanceof Tesoro tesoro) {
+            resultado = baul.agregarTesoro(tesoro);
+        } else {
+            throw new IllegalArgumentException("El objeto debe ser un Consumible o Tesoro.");
+        }
+
         if (resultado == Baul.ResultadoAgregar.OK) {
             baulRepository.save(baul);
         }
+
         return resultado;
     }
 }

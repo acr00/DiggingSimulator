@@ -3,23 +3,23 @@ package dev.acr.diggingsimulator.Service;
 import dev.acr.diggingsimulator.Model.Anticuario;
 import dev.acr.diggingsimulator.Model.Tesoro;
 import dev.acr.diggingsimulator.Repository.AnticuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AnticuarioServiceImpl implements AnticuarioService {
 
-    @Autowired
-    private AnticuarioRepository anticuarioRepository;
+    private final AnticuarioRepository anticuarioRepository;
+
+    public AnticuarioServiceImpl(AnticuarioRepository anticuarioRepository) {
+        this.anticuarioRepository = anticuarioRepository;
+    }
 
     @Override
     public Tesoro mejorarEstado(Long anticuarioId, Tesoro tesoro, float monedas) {
-        Optional<Anticuario> anticuarioOptional = anticuarioRepository.findById(anticuarioId);
-        if (anticuarioOptional.isPresent()) {
-            return anticuarioOptional.get().mejorarEstado(tesoro, monedas);
-        }
-        throw new RuntimeException("Anticuario no encontrado con id: " + anticuarioId);
+        Anticuario anticuario = anticuarioRepository.findById(anticuarioId)
+            .orElseThrow(() -> new EntityNotFoundException("Anticuario no encontrado con id: " + anticuarioId));
+
+        return anticuario.mejorarEstado(tesoro, monedas);
     }
 }
