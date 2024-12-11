@@ -8,6 +8,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import dev.acr.diggingsimulator.Model.User;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -3,6 +3,9 @@ package dev.acr.diggingsimulator.Users;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import dev.acr.diggingsimulator.Model.User;
+import dev.acr.diggingsimulator.Model.Enums.UserRole;
+
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;

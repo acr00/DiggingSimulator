@@ -6,6 +6,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
+import dev.acr.diggingsimulator.Model.User;
+import dev.acr.diggingsimulator.Model.Enums.UserRole;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

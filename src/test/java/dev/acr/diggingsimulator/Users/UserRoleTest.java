@@ -1,6 +1,9 @@
 package dev.acr.diggingsimulator.Users;
 
 import org.junit.jupiter.api.Test;
+
+import dev.acr.diggingsimulator.Model.Enums.UserRole;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserRoleTest {

@@ -8,6 +8,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import dev.acr.diggingsimulator.Model.User;
+import dev.acr.diggingsimulator.Model.Enums.UserRole;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
