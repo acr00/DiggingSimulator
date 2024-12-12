@@ -4,7 +4,6 @@ import dev.acr.diggingsimulator.Config.JwtUtils;
 import dev.acr.diggingsimulator.Config.LoginRequest;
 import dev.acr.diggingsimulator.Config.RegisterRequest;
 import dev.acr.diggingsimulator.Model.Usuario;
-import dev.acr.diggingsimulator.Model.Enums.UserRole;
 import dev.acr.diggingsimulator.Repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,11 +27,12 @@ public class AuthService {
     PasswordEncoder passwordEncoder;
 
     public void register(RegisterRequest registerRequest) {
+
         Usuario usuario = Usuario.builder()
                 .username(registerRequest.username())
                 .password(passwordEncoder.encode(registerRequest.password()))
                 .email(registerRequest.email())
-                .role(UserRole.USER)
+                .role(Usuario.Role.USER)
                 .build();
                 usuarioRepository.save(usuario);
     }
