@@ -1,6 +1,5 @@
 package dev.acr.diggingsimulator.Controller;
 
-import dev.acr.diggingsimulator.Model.Consumible;
 import dev.acr.diggingsimulator.Model.Tesoro;
 import dev.acr.diggingsimulator.Service.BaulService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +12,6 @@ public class BaulController {
 
     @Autowired
     private BaulService baulService;
-
-    @PostMapping("/{baulId}/consumibles")
-    public ResponseEntity<String> agregarConsumible(@PathVariable Long baulId, @RequestBody Consumible consumible) {
-        try {
-            baulService.agregarConsumible(baulId, consumible);
-            return ResponseEntity.ok("Consumible agregado exitosamente.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 
     @PostMapping("/{baulId}/tesoros")
     public ResponseEntity<String> agregarTesoro(@PathVariable Long baulId, @RequestBody Tesoro tesoro) {

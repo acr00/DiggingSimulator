@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/ds/auth")
+
 public class AuthController {
     @Autowired
     AuthService authService;
@@ -26,6 +27,7 @@ public class AuthController {
         authService.register(registerRequest);
         return login(new LoginRequest(registerRequest.username(), registerRequest.password()), response);
     }
-    
+
+    //logica del metodo de logout
 
 }

@@ -96,9 +96,7 @@ public class Personaje {
     }
     
     public Baul.CapacidadStatus agregarObjetoABaul(Object objeto) {
-        if (objeto instanceof Consumible consumible) {
-            return baul.agregarConsumible(consumible);
-        } else if (objeto instanceof Tesoro tesoro) {
+    if (objeto instanceof Tesoro tesoro) {
             return baul.agregarTesoro(tesoro);
         }
         throw new IllegalArgumentException("El objeto no es ni un Consumible ni un Tesoro.");

@@ -2,7 +2,6 @@ package dev.acr.diggingsimulator.Service;
 
 import dev.acr.diggingsimulator.Model.Baul;
 import dev.acr.diggingsimulator.Model.Tesoro;
-import dev.acr.diggingsimulator.Model.Consumible;
 import dev.acr.diggingsimulator.Repository.BaulRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -46,31 +45,8 @@ public class BaulServiceImpl implements BaulService {
     }
 
     @Override
-    public Baul.CapacidadStatus agregarConsumible(Long baulId, Consumible consumible) {
-        return agregarObjetoABaul(baulId, consumible);
-    }
-
-    @Override
     public Baul.CapacidadStatus agregarTesoro(Long baulId, Tesoro tesoro) {
-        return agregarObjetoABaul(baulId, tesoro);
+        return agregarTesoro(baulId, tesoro);
     }
 
-    private Baul.CapacidadStatus agregarObjetoABaul(Long baulId, Object objeto) {
-        Baul baul = obtenerBaulExistente(baulId);
-        Baul.CapacidadStatus resultado;
-
-        if (objeto instanceof Consumible consumible) {
-            resultado = baul.agregarConsumible(consumible);
-        } else if (objeto instanceof Tesoro tesoro) {
-            resultado = baul.agregarTesoro(tesoro);
-        } else {
-            throw new IllegalArgumentException("El objeto debe ser un Consumible o Tesoro.");
-        }
-
-        if (resultado == Baul.CapacidadStatus.OK) {
-            baulRepository.save(baul);
-        }
-
-        return resultado;
-    }
 }

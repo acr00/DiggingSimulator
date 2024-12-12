@@ -2,7 +2,6 @@ package dev.acr.diggingsimulator.Service;
 
 import dev.acr.diggingsimulator.Model.Baul;
 import dev.acr.diggingsimulator.Model.Baul.CapacidadStatus;
-import dev.acr.diggingsimulator.Model.Consumible;
 import dev.acr.diggingsimulator.Model.Tesoro;
 
 import java.util.Optional;
@@ -13,7 +12,6 @@ public interface BaulService {
     Baul actualizarBaul(Baul baulId);
     void eliminarBaul(Long baulId);
 
-    CapacidadStatus agregarConsumible(Long baulId, Consumible consumible);
     CapacidadStatus agregarTesoro(Long baulId, Tesoro tesoro);
 }
 
