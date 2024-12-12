@@ -1,6 +1,5 @@
 package dev.acr.diggingsimulator.Service;
 
-import dev.acr.diggingsimulator.Model.Enums.UserRole;
 import dev.acr.diggingsimulator.Model.Usuario;
 import dev.acr.diggingsimulator.Repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -51,8 +50,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario cambiarRol(Long usuarioId, UserRole nuevoRol, Usuario admin) {
-        verificarAdmin(admin);
+    public Usuario cambiarRol(Long usuarioId, Usuario.Role nuevoRol, Usuario admin) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
@@ -61,13 +59,7 @@ public class UsuarioService {
     }
 
     public List<Usuario> obtenerTodosLosUsuarios(Usuario admin) {
-        verificarAdmin(admin);
         return usuarioRepository.findAll();
     }
 
-    private void verificarAdmin(Usuario admin) {
-        if (!admin.esAdmin()) {
-            throw new AccessDeniedException("Solo un administrador puede realizar esta acción");
-        }
-    }
 }

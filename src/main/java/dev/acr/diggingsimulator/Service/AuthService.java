@@ -35,6 +35,7 @@ public class AuthService {
                 .role(Usuario.Role.USER)
                 .build();
                 usuarioRepository.save(usuario);
+                
     }
 
     public String login(LoginRequest loginRequest) {

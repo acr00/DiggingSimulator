@@ -1,7 +1,6 @@
 package dev.acr.diggingsimulator.Config;
 
 import dev.acr.diggingsimulator.Model.Usuario;
-import dev.acr.diggingsimulator.Model.Enums.UserRole;
 import dev.acr.diggingsimulator.Repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -45,8 +44,8 @@ public class SecurityConfig{
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(x -> x
             .requestMatchers("/ds/auth/**").permitAll()
-            .requestMatchers("/ds/admin/**").hasRole(UserRole.ADMIN.name())
-            .requestMatchers("/ds/**").hasAnyRole(UserRole.ADMIN.name(),UserRole.USER.name())
+            .requestMatchers("/ds/admin/**").hasRole(Usuario.Role.ADMIN.name())
+            .requestMatchers("/ds/**").hasAnyRole(Usuario.Role.ADMIN.name(),Usuario.Role.USER.name())
             .anyRequest().authenticated());
         return http.build();
 
@@ -70,7 +69,7 @@ public class SecurityConfig{
     public CommandLineRunner runner(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
 
         return x -> {
-            Usuario rootUser = Usuario.builder().role(UserRole.ADMIN).username("admin")
+            Usuario rootUser = Usuario.builder().role(Usuario.Role.ADMIN).username("admin")
             .email("email@mail.com").password(passwordEncoder.encode("password")).build();
             usuarioRepository.save(rootUser);
         };
