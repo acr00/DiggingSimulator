@@ -2,16 +2,18 @@ package dev.acr.diggingsimulator.Model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
-import dev.acr.diggingsimulator.Model.Enums.UserRole;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import jakarta.validation.constraints.*;
 
+@EqualsAndHashCode
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
@@ -33,40 +35,12 @@ public class Usuario {
     @Column(unique = true)
     private String email;
 
-    @PositiveOrZero(message = "La moneda no puede ser negativa")
-    private float moneda = 0f;
+    @Column(nullable = false)
+    private Role role;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private UserRole role = UserRole.USER; 
-
-    @Column(name = "fecha_registro")
-    private LocalDateTime fechaRegistro;
-
-    @PrePersist
-    protected void onCreate() {
-        fechaRegistro = LocalDateTime.now();
+    public enum Role {
+        USER,
+        ADMIN
     }
 
-    
-    public boolean esAdmin() {
-        return this.role == UserRole.ADMIN;
-    }
-
-    public void cambiarRol(UserRole nuevoRol) {
-        if (this.esAdmin()) {
-            this.role = nuevoRol;
-        } else {
-            throw new SecurityException("Solo un administrador puede cambiar roles");
-        }
-    }
-    public boolean registrarse() {
-        return this.username != null && !this.username.isEmpty() 
-               && this.password != null && this.password.length() >= 8;
-    }
-    public void actualizarMoneda(float cantidad) {
-        if (this.moneda + cantidad >= 0) {
-            this.moneda += cantidad;
-        }
-    }
 }

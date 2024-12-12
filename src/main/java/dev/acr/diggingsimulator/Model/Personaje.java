@@ -40,6 +40,9 @@ public class Personaje {
     @PositiveOrZero(message = "La experiencia no puede ser negativa")
     private int experiencia = 0;
 
+    @PositiveOrZero(message = "La moneda no puede ser negativa")
+    private float moneda = 0f;
+
     @PositiveOrZero(message = "La energía no puede ser negativa")
     private int energia = 100;
 
@@ -101,6 +104,12 @@ public class Personaje {
         throw new IllegalArgumentException("El objeto no es ni un Consumible ni un Tesoro.");
     }
 
+    public void actualizarMoneda(float cantidad) {
+        if (this.moneda + cantidad >= 0) {
+            this.moneda += cantidad;
+        }
+    }
+
     public int getPosicionX() {
         return posicionX;
     }
@@ -148,6 +157,14 @@ public class Personaje {
 
     public void setNivel(int nivel) {
         this.nivel = nivel;
+    }
+
+    public float getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(float moneda) {
+        this.moneda = moneda;
     }
 }
 
