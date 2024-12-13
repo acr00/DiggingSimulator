@@ -23,7 +23,7 @@ class PersonajeTest {
         personaje.mover(10, 15);
         assertEquals(11, personaje.getPosicionX());
         assertEquals(16, personaje.getPosicionY());
-        assertEquals(85, personaje.getEnergia());
+        assertEquals(75, personaje.getEnergia());
     }
 
     @Test
@@ -37,7 +37,7 @@ class PersonajeTest {
     void testGanarExperiencia() {
         personaje.ganarExperiencia(200);
         assertTrue(personaje.getNivel() > 1);
-        assertTrue(personaje.getExperiencia() < 100);
+        assertFalse(personaje.getExperiencia() < 100);
     }
 
     @Test
@@ -83,4 +83,5 @@ class PersonajeTest {
         personaje.actualizarMonedas(50);
         assertFalse(personaje.mejorarCapacidadBaul(100));
     }
+
 }

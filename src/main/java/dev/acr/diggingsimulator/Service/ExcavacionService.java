@@ -55,7 +55,7 @@ public class ExcavacionService {
                 .orElseThrow(() -> new EntityNotFoundException("Personaje no encontrado con id: " + personajeId));
     }
 
-    private List<Object> generarTesorosEncontrados(int energiaGastada) {
+    List<Object> generarTesorosEncontrados(int energiaGastada) {
         List<Object> objetosEncontrados = new ArrayList<>();
         for (int i = 0; i < energiaGastada; i++) {
             if (random.nextFloat() < 0.1) {

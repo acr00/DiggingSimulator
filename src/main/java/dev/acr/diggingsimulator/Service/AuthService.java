@@ -32,10 +32,10 @@ public class AuthService {
                 .username(registerRequest.username())
                 .password(passwordEncoder.encode(registerRequest.password()))
                 .email(registerRequest.email())
-                .role(Usuario.Role.USER)
+                .role(Usuario.Role.ROLE_USER)
                 .build();
                 usuarioRepository.save(usuario);
-                
+
     }
 
     public String login(LoginRequest loginRequest) {

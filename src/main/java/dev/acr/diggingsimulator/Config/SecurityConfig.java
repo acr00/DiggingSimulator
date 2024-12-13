@@ -44,8 +44,8 @@ public class SecurityConfig{
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(x -> x
             .requestMatchers("/ds/auth/**").permitAll()
-            .requestMatchers("/ds/admin/**").hasRole(Usuario.Role.ADMIN.name())
-            .requestMatchers("/ds/**").hasAnyRole(Usuario.Role.ADMIN.name(),Usuario.Role.USER.name())
+            .requestMatchers("/ds/admin/**").hasRole(Usuario.Role.ROLE_ADMIN.name())
+            .requestMatchers("/ds/**").hasAnyRole(Usuario.Role.ROLE_ADMIN.name(),Usuario.Role.ROLE_USER.name())
             .anyRequest().authenticated());
         return http.build();
 
@@ -67,12 +67,18 @@ public class SecurityConfig{
     }
     @Bean
     public CommandLineRunner runner(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
-
-        return x -> {
-            Usuario rootUser = Usuario.builder().role(Usuario.Role.ADMIN).username("admin")
-            .email("email@mail.com").password(passwordEncoder.encode("password")).build();
+    return args -> {
+        if (!usuarioRepository.existsByUsername("admin")) {
+            Usuario rootUser = Usuario.builder()
+                    .role(Usuario.Role.ROLE_ADMIN)
+                    .username("admin")
+                    .email("email@mail.com")
+                    .password(passwordEncoder.encode("password"))
+                    .build();
             usuarioRepository.save(rootUser);
+            }
         };
     }
+
 
 }

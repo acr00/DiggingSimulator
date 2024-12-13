@@ -14,20 +14,20 @@ public class UsuarioTest {
         usuario.setUsername("testuser");
         usuario.setPassword("password123");
         usuario.setEmail("test@example.com");
-        usuario.setRole(Usuario.Role.USER);
+        usuario.setRole(Usuario.Role.ROLE_USER);
 
         Assertions.assertEquals("testuser", usuario.getUsername());
         Assertions.assertEquals("password123", usuario.getPassword());
         Assertions.assertEquals("test@example.com", usuario.getEmail());
-        Assertions.assertEquals(Usuario.Role.USER, usuario.getRole());
+        Assertions.assertEquals(Usuario.Role.ROLE_USER, usuario.getRole());
     }
 
     @Test
     public void testUsuarioRoleAdmin() {
         Usuario usuario = new Usuario();
-        usuario.setRole(Usuario.Role.ADMIN);
+        usuario.setRole(Usuario.Role.ROLE_ADMIN);
 
-        Assertions.assertEquals(Usuario.Role.ADMIN, usuario.getRole());
+        Assertions.assertEquals(Usuario.Role.ROLE_ADMIN, usuario.getRole());
     }
 
     @Test
