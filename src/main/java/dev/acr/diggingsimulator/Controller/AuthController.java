@@ -28,6 +28,4 @@ public class AuthController {
         return login(new LoginRequest(registerRequest.username(), registerRequest.password()), response);
     }
 
-    //logica del metodo de logout
-
 }
