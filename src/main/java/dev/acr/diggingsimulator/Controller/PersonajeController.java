@@ -60,4 +60,8 @@ public class PersonajeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @GetMapping("/{id}")
+    public Personaje obtenerPersonajePorId(@PathVariable Long id) {
+        return personajeService.findPersonajeById(id);
+    }
 }

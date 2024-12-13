@@ -110,4 +110,10 @@ public class PersonajeService {
                 .orElseThrow(() -> new EntityNotFoundException("Personaje no encontrado con id: " + personajeId));
     }
 
+    public Personaje findPersonajeById(Long personajeId) {
+        return personajeRepository.findById(personajeId)
+                .orElseThrow(() -> new EntityNotFoundException("Personaje no encontrado con id: " + personajeId));
+    }
+    
+
 }
