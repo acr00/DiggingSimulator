@@ -21,7 +21,6 @@ public class BaulServiceImpl implements BaulService {
         return baulRepository.findById(baulId)
                 .orElseThrow(() -> new EntityNotFoundException("Baúl no encontrado con id: " + baulId));
     }
-
     @Override
     public Baul crearBaul(Baul baul) {
         return baulRepository.save(baul);

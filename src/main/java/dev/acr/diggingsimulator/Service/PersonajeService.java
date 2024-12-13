@@ -5,6 +5,7 @@ import dev.acr.diggingsimulator.Model.Personaje;
 import dev.acr.diggingsimulator.Model.Usuario;
 import dev.acr.diggingsimulator.Repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import dev.acr.diggingsimulator.Repository.BaulRepository;
 import dev.acr.diggingsimulator.Repository.PersonajeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ public class PersonajeService {
     private final PersonajeRepository personajeRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public PersonajeService(PersonajeRepository personajeRepository, UsuarioRepository usuarioRepository) {
+    public PersonajeService(PersonajeRepository personajeRepository, UsuarioRepository usuarioRepository, BaulRepository baulRepository) {
         this.personajeRepository = personajeRepository;
         this.usuarioRepository = usuarioRepository;
     }
@@ -47,10 +48,10 @@ public class PersonajeService {
         }
     }
 
-    public Personaje moverPersonaje(Long personajeId, int deltaX, int deltaY) {
-        Personaje personaje = obtenerPersonajeExistente(personajeId);
+    public void moverPersonaje(Long personajeId, int deltaX, int deltaY) {
+        Personaje personaje = personajeRepository.findById(personajeId).orElseThrow(() -> new EntityNotFoundException("Personaje no encontrado"));
         personaje.mover(deltaX, deltaY);
-        return personajeRepository.save(personaje);
+        personajeRepository.save(personaje);
     }
 
     public Baul.CapacidadStatus agregarObjetoABaul(Long personajeId, Object objeto) {
@@ -108,4 +109,5 @@ public class PersonajeService {
         return personajeRepository.findById(personajeId)
                 .orElseThrow(() -> new EntityNotFoundException("Personaje no encontrado con id: " + personajeId));
     }
+
 }

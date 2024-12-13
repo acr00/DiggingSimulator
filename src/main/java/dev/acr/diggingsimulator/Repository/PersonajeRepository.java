@@ -23,4 +23,7 @@ public interface PersonajeRepository extends JpaRepository<Personaje, Long> {
 
     
     List<Personaje> findByOrderByExperienciaDesc();
+
+
+    Personaje findByUsername(String username);
 }

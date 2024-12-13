@@ -36,6 +36,18 @@ public class PersonajeController {
         }
     }
 
+    @PostMapping("/mover")
+    public ResponseEntity<String> moverPersonaje(@RequestParam Long personajeId, @RequestParam int deltaX, @RequestParam int deltaY) {
+        personajeService.moverPersonaje(personajeId, deltaX, deltaY);
+        return ResponseEntity.ok("Personaje movido con éxito.");
+    }
+
+    @PostMapping("/restaurar-energia")
+    public ResponseEntity<String> regenerarEnergia(@RequestParam Long personajeId) {
+        personajeService.restaurarEnergia(personajeId);
+        return ResponseEntity.ok("Energía regenerada con éxito.");
+    }
+
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<?> obtenerPersonajeDeUsuario(@PathVariable Long usuarioId) {
         try {

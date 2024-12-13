@@ -13,14 +13,11 @@ public class BaulController {
     @Autowired
     private BaulService baulService;
 
-    @PostMapping("/{baulId}/tesoros")
-    public ResponseEntity<String> agregarTesoro(@PathVariable Long baulId, @RequestBody Tesoro tesoro) {
-        try {
-            baulService.agregarTesoro(baulId, tesoro);
-            return ResponseEntity.ok("Tesoro agregado exitosamente.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping("/agregar-tesoro")
+    public ResponseEntity<String> agregarTesoro(@RequestParam Long baulId, @RequestBody Tesoro tesoro) {
+        baulService.agregarTesoro(baulId, tesoro);
+        return ResponseEntity.ok("Tesoro agregado al baúl.");
     }
+
 }
 

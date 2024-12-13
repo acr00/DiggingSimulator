@@ -39,10 +39,15 @@ public class Baul {
         }
         return CapacidadStatus.CAPACIDAD_LLENA;
     }
-
-    public void mejorarCapacidad() {
-        this.capacidadTesoros += 5;
+    public void mejorarCapacidad(long baulId, Personaje personaje) {
+        if (personaje.getMonedas() >= 100) {
+            capacidadTesoros += 10;
+            personaje.setMonedas(personaje.getMonedas() - 100);
+        } else {
+            System.out.println("No hay suficientes monedas para mejorar la capacidad");
+        }
     }
+
     public Long getBaulId() {
         return baulId;
     }
