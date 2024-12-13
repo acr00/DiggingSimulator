@@ -2,6 +2,7 @@ package dev.acr.diggingsimulator.Service;
 
 import dev.acr.diggingsimulator.Model.Usuario;
 import dev.acr.diggingsimulator.Repository.UsuarioRepository;
+import dev.acr.diggingsimulator.Service.UsuarioService.AccessDeniedException;
 import dev.acr.diggingsimulator.Service.UsuarioService.UserAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,6 +77,31 @@ class UsuarioServiceTest {
         verify(usuarioRepository, times(0)).save(usuario);
     }
 
+
+    @Test
+    void testRegistrarUsuarioConUsernameNull() {
+        usuario.setUsername(null);
+
+        UserAlreadyExistsException exception = assertThrows(UserAlreadyExistsException.class, () -> {
+            usuarioService.registrarUsuario(usuario);
+        });
+
+        assertEquals("El nombre de usuario ya existe", exception.getMessage());
+    }
+
+
+    @Test
+    void testCambiarRolUsuarioSinPermisos() {
+        Long usuarioId = 1L;
+        when(usuarioRepository.findById(usuarioId)).thenReturn(Optional.of(usuario));
+
+
+        Usuario usuarioConNuevoRol = usuarioService.cambiarRol(usuarioId, Usuario.Role.ROLE_ADMIN, new Usuario());
+
+        assertNotEquals(Usuario.Role.ROLE_ADMIN, usuarioConNuevoRol.getRole());
+        verify(usuarioRepository, times(0)).save(usuario);
+    }
+
     @Test
     void testCambiarRolUsuarioExitoso() {
         Long usuarioId = 1L;
@@ -113,5 +139,15 @@ class UsuarioServiceTest {
         assertNotNull(usuarios);
         assertEquals(2, usuarios.size());
         verify(usuarioRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testObtenerTodosLosUsuariosSinPermisos() {
+        // Usuario sin permisos
+        Usuario usuarioSinPermisos = new Usuario();
+        usuarioSinPermisos.setRole(Usuario.Role.ROLE_USER);
+
+        
+        assertThrows(AccessDeniedException.class, () -> usuarioService.obtenerTodosLosUsuarios(usuarioSinPermisos));
     }
 }

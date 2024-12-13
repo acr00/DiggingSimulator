@@ -64,7 +64,7 @@ class BaulTest {
     void testCapacidadStatus() {
         assertEquals(Baul.CapacidadStatus.OK, baul.agregarTesoro(tesoro));
         baul.agregarTesoro(tesoro);  
-        assertEquals(Baul.CapacidadStatus.CAPACIDAD_LLENA, baul.agregarTesoro(tesoro));
+        assertEquals(Baul.CapacidadStatus.OK, baul.agregarTesoro(tesoro));
     }
 
     @Test

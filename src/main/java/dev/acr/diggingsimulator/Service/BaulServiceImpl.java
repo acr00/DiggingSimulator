@@ -13,7 +13,7 @@ public class BaulServiceImpl implements BaulService {
 
     private final BaulRepository baulRepository;
 
-    public BaulServiceImpl(BaulRepository baulRepository) {
+    public BaulServiceImpl(BaulRepository baulRepository, PersonajeService personajeRepository) {
         this.baulRepository = baulRepository;
     }
 
